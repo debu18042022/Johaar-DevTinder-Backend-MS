@@ -18,4 +18,15 @@
 - Order of the routes matter a lot.
 - Install postman app and create a workspace, collection and make an API call.
 - Write logic to handle GET, POST, PATCH, DELETE Api calls and test them on postman.
+- Explore routing and use of ?, +, *, () in the routes
+- Use of regex in routes /a/, /.*fly$/
+- Reading the query params in the routes
+- Reading the dynamic routes
+
+- Multiple route handlers - Play with the code
+- next()
+- next function and errors along with the res.send()
+- app.use('/route,rh, rh2, [rh3, rh4], rh5)
+- What is a middleware 
+- How express.js basically handles the requests behind the scenes.
 
