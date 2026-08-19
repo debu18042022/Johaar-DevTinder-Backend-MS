@@ -18,8 +18,8 @@
 - Order of the routes matter a lot.
 - Install postman app and create a workspace, collection and make an API call.
 - Write logic to handle GET, POST, PATCH, DELETE Api calls and test them on postman.
-- Explore routing and use of ?, +, *, () in the routes
-- Use of regex in routes /a/, /.*fly$/
+- Explore routing and use of ?, +, \*, () in the routes
+- Use of regex in routes /a/, /.\*fly$/
 - Reading the query params in the routes
 - Reading the dynamic routes
 
@@ -27,6 +27,9 @@
 - next()
 - next function and errors along with the res.send()
 - app.use('/route,rh, rh2, [rh3, rh4], rh5)
-- What is a middleware 
+- What is a middleware
 - How express.js basically handles the requests behind the scenes.
-
+- Difference between app.use and app.all
+- write a dummy auth middleware for admin
+- write a dummy auth middleware for all user routes except user login
+- Error handling using app.use("/", (err, req, res, next) = {}) [whenever we write this Wild Card Error Handling so always keeps it towards the end and this is  not a proper way of error handling because proper way of error handling is always try and catch but we can keep this 3-4 lines of code at the end for the safe zone]

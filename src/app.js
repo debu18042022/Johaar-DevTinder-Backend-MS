@@ -3,18 +3,20 @@ const { adminAuth, userAuth } = require("./middlewares/auth");
 
 const app = express();
 
-app.use("/admin", adminAuth);
-
-app.get("/admin/getData", (req, res) => {
-  res.send("GET ALL DATA");
+app.get("/getUserData", (req, res) => {
+  // try {
+    // logic of getting DB data and give response.
+    throw new Error("ajsdbjasbdjkas");
+    res.send("sent user data");
+  // } catch (err) {
+  //   res.status(500).send("some error occured please contact technical team");
+  // }
 });
 
-app.get("/user/getData", userAuth, (req, res) => {
-  res.send("GET USER DATA");
-});
-
-app.delete("/admin/delete", (req, res) => {
-  res.send("DELETED ALL DATA");
+app.use("/", (err, req, res, next) => { //  wild card error handling
+  if(err){
+    res.status(500).send("something went wrong");
+  }
 });
 
 app.listen(7777, () => {
