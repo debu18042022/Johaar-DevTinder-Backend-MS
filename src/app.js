@@ -7,22 +7,54 @@ const app = express();
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  // console.log(req.body);
   // creating a new instance of the User model.
   const user = new User(req.body);
 
   try {
     await user.save(); // by this line our user data will save in the database inside the User collection
     // this save() method returns a Promise so we need to apply async and await
-    res.status(200).send("user Added Successfully");
+    res.send("user Added Successfully");
   } catch (err) {
     res.status(400).send("Error saving the user:" + " " + err.message);
   }
 });
 
+app.get("/user", async (req, res) => {
+  try {
+    const userEmail = req.body.emailId;
+    const user = await User.findOne({ emailId: userEmail });
+    if (!user) {
+      res.status(400).send("user not found!");
+    }
+    else {
+      res.send(user);
+    }
+  } catch (err) {
+    if (err) {
+      res.status(500).send("something went wrong" + "" + err);
+    }
+  }
+})
+
+app.get("/feed", async (req, res) => {
+  try {
+    const { lastName, age } = req.body;
+
+    const users = await User.find({ lastName: lastName, age: age });
+    if (users.length === 0) {
+      res.status(400).send("users not found");
+    }
+    else {
+      res.send(users);
+    }
+  } catch (err) {
+    res.status(500).send("Something went wrong" + " " + err);
+  }
+})
+
 app.use("/", (err, req, res, next) => { // wild card error handling
   if (err) {
-    res.status(500).send("Something went wrong:" + " " + err.message);
+    res.status(500).send("Something went wrong, connect with technical Team:" + " " + err.message);
   }
 });
 
