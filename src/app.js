@@ -4,15 +4,12 @@ const User = require("./model/user");
 
 const app = express();
 
+app.use(express.json());
+
 app.post("/signup", async (req, res) => {
-  const user = new UUser({ // creating a new instance of the User model.
-    firstName: "Anand",
-    lastName: "Singh",
-    emailId: "anandsingh@gmail.com",
-    password: "12342343",
-    age: 27,
-    gender: "male",
-  });
+  // console.log(req.body);
+  // creating a new instance of the User model.
+  const user = new User(req.body);
 
   try {
     await user.save(); // by this line our user data will save in the database inside the User collection
