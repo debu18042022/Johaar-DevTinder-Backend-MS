@@ -33,3 +33,12 @@
 - write a dummy auth middleware for admin
 - write a dummy auth middleware for all user routes except user login
 - Error handling using app.use("/", (err, req, res, next) = {}) [whenever we write this Wild Card Error Handling so always keeps it towards the end and this is  not a proper way of error handling because proper way of error handling is always try and catch but we can keep this 3-4 lines of code at the end for the safe zone]
+
+- Create your free cluster on MongoDB official website (Mongo Atlas)
+- install mongoose library
+- Connect your application to your Database "Connection-url"/devTider
+- Call the connectDB function and connect Database before starting application on 7777
+- Create a user Schema & user model
+- Create a post /signup api to add data to database
+- Push some documents using api call from postman
+- Error handling using try and catch
