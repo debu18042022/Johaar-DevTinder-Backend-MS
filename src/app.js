@@ -93,6 +93,7 @@ app.patch("/user/:id", async (req, res) => {
       req.body,
       {
         returnDocument: "after",
+        runValidators: true,
       }
     );
 
@@ -103,8 +104,7 @@ app.patch("/user/:id", async (req, res) => {
     res.send("User updated successfully");
 
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Something went wrong");
+    res.status(500).send("Something went wrong:" + " "  + err);
   }
 });
 

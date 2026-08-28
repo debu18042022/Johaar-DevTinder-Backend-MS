@@ -50,4 +50,14 @@
 - API - get all the user by Using Model.find() i.e., User.find()
 - API - delete the user by using Model.findbyIDAndDelete
 - API- update the user
-- difference between patch and put http method
+- Difference between patch and put http method
+- Explore the mpngodb mongoose documentations for Model methods
+- What are options in a Model.findOneAndUpdate method, explore more  about it
+- API - update the user with email Id
+
+- Explore schemaType options from the documentation
+- add required, unique, lowercase, min, minlength, trim
+- Add default
+- Create a custom validation fucntion for gender
+- Improve the DB schema - Put all the appropriate validations on each field i schema
+- Add timestamps to the user schema
