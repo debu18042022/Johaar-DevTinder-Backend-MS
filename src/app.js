@@ -83,14 +83,23 @@ app.delete("/user/:id", async (req, res) => {
 app.patch("/user/:id", async (req, res) => {
   try {
     const userId = req.params.id;
+    const data = req.body;
 
     if (!mongoose.isValidObjectId(userId)) {
       return res.status(400).send("Invalid user ID");
     }
 
+    const ALLOWED_UPDATE = ["age", "gender", "photoUrl", "about", "skills"]
+
+    const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATE.includes(k));
+
+    if (!isUpdateAllowed) throw new Error('Somefields are not allowed to update');
+
+    if (data?.skills.length > 10) throw new Error("max. skills can be 10 only");
+
     const user = await User.findByIdAndUpdate(
       userId,
-      req.body,
+      data,
       {
         returnDocument: "after",
         runValidators: true,
@@ -104,7 +113,7 @@ app.patch("/user/:id", async (req, res) => {
     res.send("User updated successfully");
 
   } catch (err) {
-    res.status(500).send("Something went wrong:" + " "  + err);
+    res.status(500).send("User Update Failed:" + " " + err);
   }
 });
 
