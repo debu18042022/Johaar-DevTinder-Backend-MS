@@ -47,4 +47,7 @@
 - Make your signup API dynamic to receive data from the end user
 - User.findOne with duplicate email Ids which object returned
 - API - get user by email
-- APi - get all the user by Using Model.find() i.e., User.find()
+- API - get all the user by Using Model.find() i.e., User.find()
+- API - delete the user by using Model.findbyIDAndDelete
+- API- update the user
+- difference between patch and put http method
