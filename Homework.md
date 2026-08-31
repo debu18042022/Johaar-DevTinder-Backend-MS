@@ -81,3 +81,5 @@
 - Read the cookies inside your profile API and find the loggedin User
 - Add the userAuth middleware in /profile API anc create a new API sendConnectionRequest
 - Set the expiry of JWT token and cookies to 7 days
+- Create userSchema method to getJWT()
+- Create userSchema method validatePassword(passwordInputByUser)
