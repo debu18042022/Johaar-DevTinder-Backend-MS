@@ -8,12 +8,14 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minLength: 3,
         maxLenght: 50,
+        set: (value) => value.charAt(0).toUpperCase() + value.slice(1),
     },
     lastName: {
         type: String,
         trim: true,
         minLength: 4,
         maxLenght: 50,
+        set(value) { return value.charAt(0).toUpperCase() + value.slice(1) },
     },
     emailId: {
         type: String,

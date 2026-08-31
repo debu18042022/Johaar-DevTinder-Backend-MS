@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./config/database");
 const mongoose = require('mongoose');
 const User = require("./model/user");
+const { validateSignUpData } = require('./utils/validation');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -9,10 +11,15 @@ app.use(express.json());
 
 // signup api
 app.post("/signup", async (req, res) => {
-  // creating a new instance of the User model.
-  const user = new User(req.body);
-
   try {
+    validateSignUpData(req);
+
+    const { firstName, lastName, emailId, password } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // creating a new instance of the User model.
+    const user = new User({ firstName, lastName, emailId, password: passwordHash });
     await user.save(); // by this line our user data will save in the database inside the User collection
     // this save() method returns a Promise so we need to apply async and await
     res.send("user Added Successfully");
@@ -20,6 +27,26 @@ app.post("/signup", async (req, res) => {
     res.status(400).send("Error saving the user:" + " " + err.message);
   }
 });
+
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+
+    if (!user) {
+      throw new Error("invalid credential");
+    }
+
+    const isUserValid = await bcrypt.compare(password, user.password);
+
+    if (!isUserValid) {
+      throw new Error('invalid credential');
+    }
+    else {
+      res.send('login successfully!!!');
+    }
+  } catch (err) { res.status(400).send("ERR : " + err.message) };
+})
 
 // get partiular user
 app.get("/user", async (req, res) => {
