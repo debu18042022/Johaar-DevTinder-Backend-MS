@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
         trim: true,
-        minLength: 4,
+        minLength: 3,
         maxLenght: 50,
     },
     lastName: {
@@ -20,12 +21,22 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
         unique: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('invalid email id');
+            }
+        }
     },
     password: {
         type: String,
         required: true,
         trim: true,
         maxLenght: 50,
+        validate(value) {
+            if (!validator.isStrongPassword(value)) {
+                throw new Error('Password must contains : minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1')
+            }
+        }
     },
     age: {
         type: Number,
@@ -33,7 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        // enum: ['male', 'female', 'others'],
+        enum: ['male', 'female', 'others'],
 
         // validate: function (gender) {
         //     if (!gender.includes(['male', 'felmale', 'others'])) {
@@ -41,16 +52,21 @@ const userSchema = new mongoose.Schema({
         //     }
         // },
 
-        validate: {
-            validator: function (gender) {
-                return ['male', 'female', 'others'].includes(gender);
-            },
-            message: 'gender can only be male, female, others'
-        }
+        // validate: {
+        //     validator: function (gender) {
+        //         return ['male', 'female', 'others'].includes(gender);
+        //     },
+        //     message: 'gender can only be male, female, others'
+        // }
     },
     photoUrl: {
         type: String,
-        default: "https://thumbs.dreamstime.com/b/user-profile-icon-black-silhouette-avatar-placeholder-simple-graphic-generic-user-profile-icon-black-silhouette-style-433286589.jpg"
+        default: "https://thumbs.dreamstime.com/b/user-profile-icon-black-silhouette-avatar-placeholder-simple-graphic-generic-user-profile-icon-black-silhouette-style-433286589.jpg",
+        validate(value) {
+            if (!validator.isURL(value)) {
+                throw new Error('Url is not valid');
+            }
+        }
     },
     about: {
         type: String,
