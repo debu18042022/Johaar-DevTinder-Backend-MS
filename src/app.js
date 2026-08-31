@@ -6,6 +6,7 @@ const { validateSignUpData } = require('./utils/validation');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const { userAuth } = require('./middlewares/auth');
 
 const app = express();
 
@@ -46,131 +47,32 @@ app.post("/login", async (req, res) => {
       throw new Error('Invalid Credentials');
     }
     else {
-      const token = jwt.sign({ '_id': user._id }, 'DEV@Tinder$790');
+      const token = jwt.sign({ '_id': user._id }, 'DEV@Tinder$790', { expiresIn: '1h' });
 
       //Add the token to cookie and send the response back to the users
-      res.cookie('token', token);
+      res.cookie('token', token, {
+        // maxAge: 60 * 1000 // 1 minute in ms
+        expires: new Date(Date.now() + 1 * 60 * 60 * 1000) // 60 * 1000 → 1 minute, 60 * 60 * 1000 → 1 hour, 1 * → still 1 hour 
+      });
       res.send('login successfull!!!');
     }
   } catch (err) { res.status(400).send("ERR : " + err.message) };
 })
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = req.cookies;
-    const { token } = cookies;
+    const user = req.user;
 
-    if (!token) {
-      throw new Error('Invalid token');
-    }
-
-    const decodeMessage = jwt.verify(token, 'DEV@Tinder#12345');
-
-    const { _id } = decodeMessage;
-
-    const user = await User.findById(_id);
     res.send(user);
-
   } catch (err) {
     res.status(400).send("ERR : " + err);
   }
 })
 
-// get partiular user
-app.get("/user", async (req, res) => {
-  try {
-    const userEmail = req.body.emailId;
-    const user = await User.findOne({ emailId: userEmail });
-    if (!user) {
-      res.status(400).send("user not found!");
-    }
-    else {
-      res.send(user);
-    }
-  } catch (err) {
-    if (err) {
-      res.status(500).send("something went wrong" + "" + err);
-    }
-  }
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  console.log('connection request sending!!!');
+  res.send('A new Connection request sent!');
 })
-
-// get all the user
-app.get("/feed", async (req, res) => {
-  try {
-    const { lastName, age } = req.body;
-
-    const users = await User.find({ lastName: lastName, age: age });
-    if (users.length === 0) {
-      res.status(400).send("users not found");
-    }
-    else {
-      res.send(users);
-    }
-  } catch (err) {
-    res.status(500).send("Something went wrong" + " " + err);
-  }
-})
-
-// delete the user
-app.delete("/user/:id", async (req, res) => {
-  try {
-    const userId = req.params.id;
-
-    if (!mongoose.isValidObjectId(userId)) {
-      return res.send(400).send("Invalide user ID");
-    }
-
-    const user = await User.findByIdAndDelete(userId);
-
-    if (!user) {
-      return res.status(400).send('user not found');
-    }
-
-    res.send("User deleted successfully");
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Something went wrong');
-  }
-})
-
-// update the user
-app.patch("/user/:id", async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const data = req.body;
-
-    if (!mongoose.isValidObjectId(userId)) {
-      return res.status(400).send("Invalid user ID");
-    }
-
-    const ALLOWED_UPDATE = ["age", "gender", "photoUrl", "about", "skills"]
-
-    const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATE.includes(k));
-
-    if (!isUpdateAllowed) throw new Error('Somefields are not allowed to update');
-
-    if (data?.skills.length > 10) throw new Error("max. skills can be 10 only");
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      data,
-      {
-        returnDocument: "after",
-        runValidators: true,
-      }
-    );
-
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-
-    res.send("User updated successfully");
-
-  } catch (err) {
-    res.status(500).send("User Update Failed:" + " " + err);
-  }
-});
 
 app.use("/", (err, req, res, next) => { // wild card error handling
   if (err) {
