@@ -72,3 +72,10 @@
 - Create passwordhash using brycpt.hash and save the user with encrypted password
 - Create login api
 - Compare passwords and throw error if email and password is invalid
+
+- Install cookie-parser
+- Just send a dummy cookie to user
+- Create GET /profile API and check if you get the cookie back
+- Install jsonwebtoken
+- In login API after email and password validation, create a JWT token and send it to user
+- Read the cookies inside your profile API and find the loggedin User
