@@ -1,4 +1,5 @@
 const validator = require('validator');
+const User = require('../model/user');
 
 const validateSignUpData = (req) => {
     const { firstName, lastName, emailId, password } = req.body;
@@ -20,7 +21,7 @@ const validateEditProfileData = (req) => {
     const isEditAllowed = Object.keys(req.body).every((field) =>
         allowedEditFields.includes(field)
     );
-    
+
     return isEditAllowed;
 }
 

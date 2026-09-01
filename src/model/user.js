@@ -9,14 +9,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         minLength: 3,
-        maxLenght: 50,
+        maxLength: 50,
         set: (value) => value.charAt(0).toUpperCase() + value.slice(1),
     },
     lastName: {
         type: String,
         trim: true,
         minLength: 4,
-        maxLenght: 50,
+        maxLength: 50,
         set(value) { return value.charAt(0).toUpperCase() + value.slice(1) },
     },
     emailId: {
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maxLenght: 50,
+        maxLength: 100,
         validate(value) {
             if (!validator.isStrongPassword(value)) {
                 throw new Error('Password must contains : minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1')
@@ -78,6 +78,12 @@ const userSchema = new mongoose.Schema({
     },
     skills: {
         type: [String]
+    },
+    forgotPasswordToken: {
+        type: String,
+    },
+    forgotPasswordTokenExpiry: {
+        type: Date
     }
 }, { timestamps: true })
 
