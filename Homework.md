@@ -108,3 +108,7 @@
 - Read this article about the compound indexes
 
 - Write code with proper validation of this POST Api /request/review/:status/:requestId
+- Thought Process - POST vs GET
+- Read about ref and populate 
+- Create GET /user/requests/received with all the checks
+- Create GET /user/connections with all the checks
