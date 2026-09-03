@@ -47,8 +47,8 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
         await connectionRequest.save();
 
         const message = {
-            interested: `${req.user.firstName} sent a connection request to ${recipientUser.firstName} successfully.`,
-            ignored: `${req.user.firstName} ignored ${recipientUser.firstName}'s connection request.`
+            interested: `${req.user.firstName} interested in ${recipientUser.firstName}.`,
+            ignored: `${req.user.firstName} ignored ${recipientUser.firstName}`
         };
 
         res.send(message[status]);

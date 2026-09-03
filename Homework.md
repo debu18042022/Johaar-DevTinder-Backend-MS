@@ -112,3 +112,11 @@
 - Read about ref and populate 
 - Create GET /user/requests/received with all the checks
 - Create GET /user/connections with all the checks
+
+- Logic fro GET /user/feed API
+- Explore $ne , $and, $or, $nor, ect Logical,Comparison operators https://www.mongodb.com/docs/manual/reference/mql/query-predicates/comparison/ 
+and similar other operators. 
+
+
+Notes: 
+For pagination => .skip(page).limit(limit)
