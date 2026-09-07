@@ -10,8 +10,8 @@ const crypto = require('node:crypto');
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
         const user = req.user;
-
-        res.send(user);
+        const { password: _password, forgotPasswordToken: _forgotPasswordToken, forgotPasswordTokenExpiry: _forgotPasswordTokenExpiry, ...safeUser } = user.toObject();
+        res.status(200).json({ message: "successful", data: safeUser });
     } catch (err) {
         res.status(400).send("ERR : " + err);
     }

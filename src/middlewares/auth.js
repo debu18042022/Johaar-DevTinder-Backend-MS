@@ -1,28 +1,40 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 
 const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
+    // No token → user is not logged in
     if (!token) {
-      throw new Error('invalid token!!!');
+      return res.status(401).send("Please log in to continue.");
     }
 
-    const decodeData = jwt.verify(token, 'DEV@Tinder$790');
-    const _id = decodeData?._id;
-    const user = await User.findById(_id);
+    // Verify JWT
+    const decodeData = jwt.verify(token, "DEV@Tinder$790");
+
+    const userId = decodeData?._id;
+
+    if (!userId) {
+      return res.status(401).send("Invalid authentication token.");
+    }
+
+    // Find user
+    const user = await User.findById(userId);
 
     if (!user) {
-      throw new Error('invalid user!!!');
+      return res.status(404).send("User not found.");
     }
 
+    // Attach logged-in user to request
     req.user = user;
-    next();
+
+    // Continue to the actual route
+    return next();
+
+  } catch (err) {
+    return res.status(401).send("Invalid or expired token.");
   }
-  catch (err) {
-    res.status(400).send('ERROR : ' + err.message);
-  }
-}
+};
 
 module.exports = { userAuth };

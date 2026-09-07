@@ -49,7 +49,14 @@ authRouter.post('/login', async (req, res) => {
             // maxAge: 60 * 1000 // 1 minute in ms
             expires: new Date(Date.now() + 1 * 60 * 60 * 1000) // 60 * 1000 → 1 minute, 60 * 60 * 1000 → 1 hour, 1 * → still 1 hour 
         });
-        res.send('login successful!');
+
+        const { password: _password,
+            forgotPasswordToken: _forgotPasswordToken,
+            forgotPasswordTokenExpiry: _forgotPasswordTokenExpiry,
+            ...safeUser
+        } = user.toObject();
+
+        res.status(200).json({ message: "login successful!", data: safeUser });
 
     } catch (err) {
         res.status(400).send('ERROR : ' + err.message);
@@ -57,7 +64,8 @@ authRouter.post('/login', async (req, res) => {
 })
 
 authRouter.post("/logout", (req, res) => {
-    res.clearCookie('token');
+    // res.clearCookie('token');
+    res.cookie("token", null, { expires: new Date(0) });
     res.send('LoggedOut successful');
 })
 
