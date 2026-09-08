@@ -16,7 +16,19 @@ authRouter.post('/signup', async (req, res) => {
         const user = new User({ firstName, lastName, emailId, password: passwordHash });
         // by this line our user data will save in the database inside the User collection and this save() method returns a Promise so we need to apply async and await
         await user.save();
-        res.send('User added successfully!');
+
+        const token = await user.getJWT();
+
+        if (!token) {
+            throw new Error('User not exist');
+        }
+
+        res.cookie('token', token, { expires: new Date(Date.now() + 1 * 60 * 60 * 1000) });
+
+        const { password: _password, ...safeUser } = user.toObject();
+        console.log("safeUser", safeUser);
+
+        res.json({ message: 'User added successfully!', data: safeUser });
 
     } catch (err) {
         res.status(400).send('Error : ' + err.message);
