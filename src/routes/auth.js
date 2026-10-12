@@ -26,7 +26,6 @@ authRouter.post('/signup', async (req, res) => {
         res.cookie('token', token, { expires: new Date(Date.now() + 1 * 60 * 60 * 1000) });
 
         const { password: _password, ...safeUser } = user.toObject();
-        console.log("safeUser", safeUser);
 
         res.json({ message: 'User added successfully!', data: safeUser });
 

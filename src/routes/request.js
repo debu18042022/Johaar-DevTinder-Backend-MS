@@ -4,6 +4,7 @@ const { userAuth } = require('../middlewares/auth');
 const ConnectionRequest = require('../model/ConnectionRequest');
 const User = require('../model/user')
 const mongoose = require('mongoose');
+const sendEmail = require('../utils/sesSendEmail');
 
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
     try {
@@ -45,6 +46,8 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
         });
 
         await connectionRequest.save();
+
+        const emailRes = await sendEmail.run();
 
         const message = {
             interested: `${req.user.firstName} interested in ${recipientUser.firstName}.`,
