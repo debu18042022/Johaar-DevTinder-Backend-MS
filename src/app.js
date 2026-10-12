@@ -34,8 +34,8 @@ app.use("/", (err, req, res, next) => { // wild card error handling
 connectDB()
   .then(() => {
     console.log("database connection establised...");
-    app.listen(7777, () => {
-      console.log("Server is successfully running on port 7777");
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is successfully running on port ${process.env.PORT}`);
     });
   })
   .catch((err) => {
